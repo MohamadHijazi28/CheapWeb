@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+      android:id="@+id/navigation_favorite"
+      android:icon="@drawable/favorite"
+      android:title="Favorite" />
+  <item
+      android:id="@+id/access"
+      android:title="Accessories"/>
+
+  <item
+      android:id="@+id/elect"
+      android:title="Electronics"/>
+
+  <item
+      android:id="@+id/clothes_shows"
+      android:title="Clothes &amp; Shows"/>
+
+  <item
+      android:id="@+id/all_cate"
+      android:title="All Categories"/>
+
+  <item
+      android:id="@+id/navigation_info"
+      android:icon="@drawable/info"
+      android:title="Info"
+      app:showAsAction="always">
+
+    <menu>
+      <item
+          android:id="@+id/navigation_logout"
+          android:title="Log-out"
+          android:icon="@drawable/log_out"
+          />
+      <item
+          android:id="@+id/nawigation_add"
+          android:title="Add item"
+          android:icon="@drawable/ic_add_black_24dp" />
+
+
+    </menu>
+
+  </item>
+
+
+
+</menu>
