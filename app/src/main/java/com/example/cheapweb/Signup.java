@@ -140,24 +140,16 @@ public class Signup extends AppCompatActivity  {
                                 return;
                             }
 
-                            mAuth.createUserWithEmailAndPassword(users.getEmail(), users.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (!task.isSuccessful()) {
-                                        Toast.makeText(Signup.this, "Please select a correct email", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
-                                        CodeV.setVisibility(View.VISIBLE);
-                                        verify.setVisibility(View.VISIBLE);
-                                        w = (int) (Math.random() * 1000000 + 100000);
-                                        SmsManager smsManager = SmsManager.getDefault();
-                                        smsManager.sendTextMessage(phoneNo.getText().toString(), null, "Your Code is :" + w, null, null);
-
-                                    }
-                                    }
-                                });
-
-
+                            if (!isEmailValid(users.getEmail())){
+                                Toast.makeText(Signup.this, "Please select a correct email", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                CodeV.setVisibility(View.VISIBLE);
+                                verify.setVisibility(View.VISIBLE);
+                                w = (int) (Math.random() * 1000000 + 100000);
+                                SmsManager smsManager = SmsManager.getDefault();
+                                smsManager.sendTextMessage(phoneNo.getText().toString(), null, "Your Code is :" + w, null, null);
+                            }
 
                         } else {
                             Toast.makeText(Signup.this, "the email is already registered", Toast.LENGTH_SHORT).show();
@@ -177,6 +169,7 @@ public class Signup extends AppCompatActivity  {
             public void onClick(View v) {
                 if (Integer.parseInt(CodeV.getText().toString()) == w) {
                     myRefUsers.push().setValue(users);
+                    mAuth.createUserWithEmailAndPassword(users.getEmail(), users.getPassword());
                     progressBar.setVisibility(View.VISIBLE);
                                 Intent m = new Intent(getApplicationContext(), MainActivity.class);
                                 m.putExtra("userEmail", email.getText().toString());
@@ -204,5 +197,9 @@ public class Signup extends AppCompatActivity  {
                 }
             }
         }
+    }
+
+    public boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
