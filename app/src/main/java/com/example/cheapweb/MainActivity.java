@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements MainDialoge.MainD
 
         searchtxt = findViewById(R.id.searchtxt);
         searchbtn = findViewById(R.id.searchbtn);
-        username=getIntent().getStringExtra("userEmail");
-        //username=mAuth.getCurrentUser().getEmail();
+        //username=getIntent().getStringExtra("userEmail");
+        username=mAuth.getCurrentUser().getEmail();
         mfirebaseDatabase=FirebaseDatabase.getInstance();
         SearchVoice=findViewById(R.id.search_voice);
         itemName1=findViewById(R.id.Item1_Name);

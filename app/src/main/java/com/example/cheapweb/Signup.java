@@ -7,7 +7,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -72,6 +74,17 @@ public class Signup extends AppCompatActivity  {
         setContentView(R.layout.activity_signup);
         mAuth = FirebaseAuth.getInstance();
 
+        //get the permission to send sms to the user phone
+        if (ContextCompat.checkSelfPermission(Signup.this, Manifest.permission.SEND_SMS)
+                == PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+
+            }
+            Toast.makeText(Signup.this, "You have already granted this permission", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            ActivityCompat.requestPermissions(Signup.this, new String[] {Manifest.permission.SEND_SMS} , PERMISSION_REQUEST_CODE);
+        }
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         fullName = (EditText) findViewById(R.id.editText3);
         email = (EditText) findViewById(R.id.editText4);
@@ -101,6 +114,7 @@ public class Signup extends AppCompatActivity  {
 
         //when the user click on this button the function will check if the email that he write is already registered
         //it will be make a Users object and set the info of the user in it..
+        //it send to the user phone a code to check and verify that the number is for him
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +152,7 @@ public class Signup extends AppCompatActivity  {
                                         w = (int) (Math.random() * 1000000 + 100000);
                                         SmsManager smsManager = SmsManager.getDefault();
                                         smsManager.sendTextMessage(phoneNo.getText().toString(), null, "Your Code is :" + w, null, null);
-                                        createUser(users);
+
                                     }
                                     }
                                 });
@@ -177,49 +191,18 @@ public class Signup extends AppCompatActivity  {
                 }
 
 
-    //this function create account to the user to success login in the future
-    private void createUser(Users users) {
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkPermission()) {
-                Log.e("permission", "Permission already granted.");
-            } else {
-                requestPermission();
-            }
-        }
-    }
-
-    private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(Signup.this, Manifest.permission.SEND_SMS);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_CODE);
-
-    }
-
+    //check the permission request
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    Toast.makeText(Signup.this,
-                            "Permission accepted", Toast.LENGTH_LONG).show();
-
-                } else {
-                    Toast.makeText(Signup.this,
-                            "Permission denied", Toast.LENGTH_LONG).show();
-                    Button sendSMS = (Button) findViewById(R.id.button3);
-                    sendSMS.setEnabled(false);
-
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_REQUEST_CODE: {
+                if (grantResults.length>0 && grantResults[0] ==PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(Signup.this, "Permission Granted", Toast.LENGTH_SHORT).show();
                 }
-                break;
+                else {
+                    Toast.makeText(Signup.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }
