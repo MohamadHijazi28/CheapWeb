@@ -193,7 +193,8 @@ public class Signup extends AppCompatActivity  {
                     Toast.makeText(Signup.this, "Permission Granted", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(Signup.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Signup.this, "Permission Denied, to enjoy using the app Please confirm the Permission", Toast.LENGTH_SHORT).show();
+                    ActivityCompat.requestPermissions(Signup.this, new String[] {Manifest.permission.SEND_SMS} , PERMISSION_REQUEST_CODE);
                 }
             }
         }
